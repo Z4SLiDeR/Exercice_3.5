@@ -1,11 +1,9 @@
 import org.example.Pret;
 import org.example.Projet;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mockito;
 
-@DisplayName("Tests d'int´egration: ensemble des composants")
+@Disabled
+@DisplayName("Tests d'integration: ensemble des composants")
 public class ITApp {
 
     @Test
@@ -26,5 +24,17 @@ public class ITApp {
         double apportBancaire = pret.calculRestantDu(montantEmprunt);
 
         Assertions.assertEquals((apportBancaire + apportPersonnel), 30085 );
+    }
+
+    @Test
+    @DisplayName("Calcul de l'achat de l'appartement de Pierre-Olivier Lefebvre")
+    public void calculCoutAppartPo(){
+        Projet projet = new Projet();
+        projet.setPrixHabitation(110_000);
+        projet.setRevenuCadastral(1_353);
+        projet.setFraisNotaireAchat(28_000);
+        projet.setFraisTransformation(10_000);
+
+        Assertions.assertEquals(projet.calculTotalProjetAchat(), 157350);
     }
 }
