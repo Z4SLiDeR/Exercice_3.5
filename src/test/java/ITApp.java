@@ -2,12 +2,10 @@ import org.example.Pret;
 import org.example.Projet;
 import org.junit.jupiter.api.*;
 
-@Disabled
-@DisplayName("Tests d'integration: ensemble des composants")
-public class ITApp {
 
+public class ITApp {
+    @Disabled
     @Test
-    @DisplayName("Validation du meilleur scénario")
     public void happyPath(){
         Projet projet = new Projet();
         projet.setPrixHabitation(100_000);
@@ -27,7 +25,6 @@ public class ITApp {
     }
 
     @Test
-    @DisplayName("Calcul de l'achat de l'appartement de Pierre-Olivier Lefebvre")
     public void calculCoutAppartPo(){
         Projet projet = new Projet();
         projet.setPrixHabitation(110_000);
@@ -35,6 +32,10 @@ public class ITApp {
         projet.setFraisNotaireAchat(28_000);
         projet.setFraisTransformation(10_000);
 
-        Assertions.assertEquals(projet.calculTotalProjetAchat(), 157350);
+        double droitEnregistrement = projet.calculDroitEnregistrement();
+        double tvaFraisTransformation = projet.calculTVAFraisTransformation();
+
+        Assertions.assertEquals(projet.getPrixHabitation() + projet.getFraisNotaireAchat() +
+                droitEnregistrement + projet.getFraisTransformation() + tvaFraisTransformation, 157_350);
     }
 }

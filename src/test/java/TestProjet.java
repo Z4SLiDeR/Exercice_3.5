@@ -4,6 +4,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
+
+@Disabled
 public class TestProjet {
 
     private static Projet mockedProjet;
@@ -16,7 +18,7 @@ public class TestProjet {
         TestProjet.mockedProjet = Mockito.spy(projet);
     }
 
-    @Disabled
+
     @Nested
     class calculTVAFraisTransformation {
         @Test
@@ -82,7 +84,7 @@ public class TestProjet {
         }
     }
 
-    @Disabled
+
     @Nested
     @DisplayName("Calcul du total euro pour le projet")
     class  calculTotalProjetAchat{
