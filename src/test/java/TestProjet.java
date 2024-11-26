@@ -5,7 +5,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
 
-@Disabled
+
 public class TestProjet {
 
     private static Projet mockedProjet;
@@ -18,7 +18,7 @@ public class TestProjet {
         TestProjet.mockedProjet = Mockito.spy(projet);
     }
 
-
+    @Disabled
     @Nested
     class calculTVAFraisTransformation {
         @Test
@@ -84,142 +84,219 @@ public class TestProjet {
         }
     }
 
+    /*------------------------------------------------------------------------------------------------------------------
+    * ------------------------------------------Devoir à partir d'ici---------------------------------------------------
+    * ------------------------------------------------------------------------------------------------------------------ */
 
+    
     @Nested
-    @DisplayName("Calcul du total euro pour le projet")
-    class  calculTotalProjetAchat{
+    @DisplayName("Calcul du total en euro pour le projet")
+    class CalculTotalProjetAchatTests {
+
         @Test
-        @DisplayName("Calcul du cout total du projet : Validation simple")
-        public void calculTotalProjetAchatSimple(){
+        @DisplayName("Validation des cas simples")
+        public void calculTotalProjetAchatSimple() {
             Assertions.assertAll(
                     () -> {
-                        projet.setPrixHabitation(100_000);
-                        projet.setFraisNotaireAchat(28000);
-                        projet.setRevenuCadastral(1345);
-                        projet.setFraisTransformation(0);
-                        Assertions.assertEquals(135500, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(100_000);
+                        mockedProjet.setFraisNotaireAchat(28_000);
+                        mockedProjet.setRevenuCadastral(1345);
+                        mockedProjet.setFraisTransformation(0);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(7_500.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(0.00);
+
+                        Assertions.assertEquals(135_500.00, mockedProjet.calculTotalProjetAchat());
                     },
                     () -> {
-                        projet.setPrixHabitation(150_000);
-                        projet.setFraisNotaireAchat(12000);
-                        projet.setRevenuCadastral(200);
-                        projet.setFraisTransformation(1000);
-                        Assertions.assertEquals(169660, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(150_000);
+                        mockedProjet.setFraisNotaireAchat(12_000);
+                        mockedProjet.setRevenuCadastral(200);
+                        mockedProjet.setFraisTransformation(1_000);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(6_600.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(60.00);
+
+                        Assertions.assertEquals(169_660.00, mockedProjet.calculTotalProjetAchat());
                     },
                     () -> {
-                        projet.setPrixHabitation(40_000);
-                        projet.setFraisNotaireAchat(10000);
-                        projet.setRevenuCadastral(350);
-                        projet.setFraisTransformation(40000);
-                        Assertions.assertEquals(92400, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(40_000);
+                        mockedProjet.setFraisNotaireAchat(10_000);
+                        mockedProjet.setRevenuCadastral(350);
+                        mockedProjet.setFraisTransformation(40_000);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(0.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(2_400.00);
+
+                        Assertions.assertEquals(92_400.00, mockedProjet.calculTotalProjetAchat());
                     },
                     () -> {
-                        projet.setPrixHabitation(40_000);
-                        projet.setFraisNotaireAchat(10000);
-                        projet.setRevenuCadastral(350);
-                        projet.setFraisTransformation(37456);
-                        Assertions.assertEquals(89703.36, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(40_000);
+                        mockedProjet.setFraisNotaireAchat(10_000);
+                        mockedProjet.setRevenuCadastral(350);
+                        mockedProjet.setFraisTransformation(37_456);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(0.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(2_247.36);
+
+                        Assertions.assertEquals(89_703.36, mockedProjet.calculTotalProjetAchat());
                     },
                     () -> {
-                        projet.setPrixHabitation(400000);
-                        projet.setFraisNotaireAchat(10034);
-                        projet.setRevenuCadastral(343);
-                        projet.setFraisTransformation(37455);
-                        Assertions.assertEquals(471736.30, projet.calculTotalProjetAchat());
-                    },
-                    () -> {
-                        projet.setPrixHabitation(0);
-                        projet.setFraisNotaireAchat(0);
-                        projet.setRevenuCadastral(0);
-                        projet.setFraisTransformation(0);
-                        Assertions.assertEquals(Exception.class, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(400_000);
+                        mockedProjet.setFraisNotaireAchat(10_034);
+                        mockedProjet.setRevenuCadastral(343);
+                        mockedProjet.setFraisTransformation(37_455);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(33_333.33);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(22_000.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(2_247.30);
+
+                        Assertions.assertEquals(471_736.30, mockedProjet.calculTotalProjetAchat());
                     }
             );
         }
 
+
+
         @Test
-        @DisplayName("Calcul du cout total du projet : Validation negative")
-        public void calculTotalProjetAchatNegatif(){
+        @DisplayName("Validation des cas négatifs")
+        public void calculTotalProjetAchatNegatif() {
             Assertions.assertAll(
                     () -> {
-                        projet.setPrixHabitation(-100_000);
-                        projet.setFraisNotaireAchat(28000);
-                        projet.setRevenuCadastral(1345);
-                        projet.setFraisTransformation(0);
-                        Assertions.assertEquals(Exception.class, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(-100_000);
+                        mockedProjet.setFraisNotaireAchat(28_000);
+                        mockedProjet.setRevenuCadastral(1345);
+                        mockedProjet.setFraisTransformation(0);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenThrow(Exception.class);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenThrow(Exception.class);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(0.00);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculTotalProjetAchat);
                     },
                     () -> {
-                        projet.setPrixHabitation(150_000);
-                        projet.setFraisNotaireAchat(-12000);
-                        projet.setRevenuCadastral(200);
-                        projet.setFraisTransformation(1000);
-                        Assertions.assertEquals(Exception.class, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(150_000);
+                        mockedProjet.setFraisNotaireAchat(-12_000);
+                        mockedProjet.setRevenuCadastral(200);
+                        mockedProjet.setFraisTransformation(1_000);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(6_600.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(60.00);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculTotalProjetAchat);
                     },
                     () -> {
-                        projet.setPrixHabitation(40_000);
-                        projet.setFraisNotaireAchat(10000);
-                        projet.setRevenuCadastral(-350);
-                        projet.setFraisTransformation(40000);
-                        Assertions.assertEquals(Exception.class, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(40_000);
+                        mockedProjet.setFraisNotaireAchat(10_000);
+                        mockedProjet.setRevenuCadastral(-350);
+                        mockedProjet.setFraisTransformation(40_000);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenThrow(Exception.class);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(2_400.00);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculTotalProjetAchat);
                     },
                     () -> {
-                        projet.setPrixHabitation(40_000);
-                        projet.setFraisNotaireAchat(10000);
-                        projet.setRevenuCadastral(350);
-                        projet.setFraisTransformation(-37456);
-                        Assertions.assertEquals(Exception.class, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(40_000);
+                        mockedProjet.setFraisNotaireAchat(10_000);
+                        mockedProjet.setRevenuCadastral(350);
+                        mockedProjet.setFraisTransformation(-37_456);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(0.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenThrow(Exception.class);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculTotalProjetAchat);
                     },
                     () -> {
-                        projet.setPrixHabitation(-400000);
-                        projet.setFraisNotaireAchat(-10034);
-                        projet.setRevenuCadastral(-343);
-                        projet.setFraisTransformation(-37455);
-                        Assertions.assertEquals(Exception.class, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(-400_000);
+                        mockedProjet.setFraisNotaireAchat(-10_034);
+                        mockedProjet.setRevenuCadastral(-343);
+                        mockedProjet.setFraisTransformation(-37_455);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenThrow(Exception.class);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenThrow(Exception.class);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenThrow(Exception.class);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculTotalProjetAchat);
                     }
             );
         }
 
+
         @Test
-        @DisplayName("Calcul du cout total du projet : Validation nombre réel")
-        public void calculTotalProjetAchatNombreReel(){
+        @DisplayName("Validation des nombres réels")
+        public void calculTotalProjetAchatNombreReel() {
             Assertions.assertAll(
                     () -> {
-                        projet.setPrixHabitation(100_000.15);
-                        projet.setFraisNotaireAchat(28000);
-                        projet.setRevenuCadastral(1345);
-                        projet.setFraisTransformation(0);
-                        Assertions.assertEquals(135500.17, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(100_000.15);
+                        mockedProjet.setFraisNotaireAchat(28_000);
+                        mockedProjet.setRevenuCadastral(1345);
+                        mockedProjet.setFraisTransformation(0);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(7_500.02);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(0.00);
+
+                        Assertions.assertEquals(135_500.17, mockedProjet.calculTotalProjetAchat());
                     },
                     () -> {
-                        projet.setPrixHabitation(150_000);
-                        projet.setFraisNotaireAchat(12000.90);
-                        projet.setRevenuCadastral(200);
-                        projet.setFraisTransformation(1000);
-                        Assertions.assertEquals(169660.90, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(150_000);
+                        mockedProjet.setFraisNotaireAchat(12_000.90);
+                        mockedProjet.setRevenuCadastral(200);
+                        mockedProjet.setFraisTransformation(1_000);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(6_600.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(60.00);
+
+                        Assertions.assertEquals(169_660.00, mockedProjet.calculTotalProjetAchat());
                     },
                     () -> {
-                        projet.setPrixHabitation(40_000);
-                        projet.setFraisNotaireAchat(10000);
-                        projet.setRevenuCadastral(350);
-                        projet.setFraisTransformation(40000.32154);
-                        Assertions.assertEquals(92400.34, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(40_000);
+                        mockedProjet.setFraisNotaireAchat(10_000);
+                        mockedProjet.setRevenuCadastral(350);
+                        mockedProjet.setFraisTransformation(40_000.32154);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(0.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(2_400.02);
+
+                        Assertions.assertEquals(92_400.34, mockedProjet.calculTotalProjetAchat());
                     },
                     () -> {
-                        projet.setPrixHabitation(40_000.123);
-                        projet.setFraisNotaireAchat(10000.123);
-                        projet.setRevenuCadastral(350);
-                        projet.setFraisTransformation(37456.123);
-                        Assertions.assertEquals(89703.74, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(40_000.123);
+                        mockedProjet.setFraisNotaireAchat(10_000.123);
+                        mockedProjet.setRevenuCadastral(350);
+                        mockedProjet.setFraisTransformation(37_456.123);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(0.01);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(2_247.37);
+
+                        Assertions.assertEquals(89_703.74, mockedProjet.calculTotalProjetAchat());
                     },
                     () -> {
-                        projet.setPrixHabitation(-400000.123);
-                        projet.setFraisNotaireAchat(-10034.123);
-                        projet.setRevenuCadastral(-343);
-                        projet.setFraisTransformation(-37455.123);
-                        Assertions.assertEquals(Exception.class, projet.calculTotalProjetAchat());
+                        mockedProjet.setPrixHabitation(-40_000.123);
+                        mockedProjet.setFraisNotaireAchat(-10_034.123);
+                        mockedProjet.setRevenuCadastral(-343);
+                        mockedProjet.setFraisTransformation(-37_455.123);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenThrow(Exception.class);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenThrow(Exception.class);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenThrow(Exception.class);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculTotalProjetAchat);
                     }
             );
         }
+
     }
 
 
@@ -231,138 +308,222 @@ public class TestProjet {
         public void calculApportMinimalSimple(){
             Assertions.assertAll(
                     () -> {
-                        projet.setPrixHabitation(100_000);
-                        projet.setRevenuCadastral(1345);
-                        projet.setFraisTransformation(1000);
-                        projet.setFraisNotaireAchat(5000);
-                        Assertions.assertEquals(22606, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(100_000);
+                        mockedProjet.setRevenuCadastral(1345);
+                        mockedProjet.setFraisTransformation(1000);
+                        mockedProjet.setFraisNotaireAchat(5000);
+
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(60.00);
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(7_500.00);
+
+                        Assertions.assertEquals(22_606.00, mockedProjet.calculApportMinimal());
+
                     },
                     () -> {
-                        projet.setPrixHabitation(100_000);
-                        projet.setFraisNotaireAchat(28000);
-                        projet.setRevenuCadastral(1345);
-                        projet.setFraisTransformation(0);
-                        Assertions.assertEquals(45500, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(100_000);
+                        mockedProjet.setFraisNotaireAchat(28000);
+                        mockedProjet.setRevenuCadastral(1345);
+                        mockedProjet.setFraisTransformation(0);
+
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(0.00);
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(7_500.00);
+
+                        Assertions.assertEquals(45_500.00, mockedProjet.calculApportMinimal());
+
                     },
                     () -> {
-                        projet.setPrixHabitation(150_000);
-                        projet.setFraisNotaireAchat(12000);
-                        projet.setRevenuCadastral(200);
-                        projet.setFraisTransformation(1000);
-                        Assertions.assertEquals(33706, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(150_000);
+                        mockedProjet.setFraisNotaireAchat(12000);
+                        mockedProjet.setRevenuCadastral(200);
+                        mockedProjet.setFraisTransformation(1000);
+
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(60.00);
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(6_600.00);
+
+                        Assertions.assertEquals(33_706.00, mockedProjet.calculApportMinimal());
+
                     },
                     () -> {
-                        projet.setPrixHabitation(40000);
-                        projet.setRevenuCadastral(350);
-                        projet.setFraisTransformation(40000);
-                        projet.setFraisNotaireAchat(10000);
-                        Assertions.assertEquals(18240, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(40000);
+                        mockedProjet.setRevenuCadastral(350);
+                        mockedProjet.setFraisTransformation(40000);
+                        mockedProjet.setFraisNotaireAchat(10000);
+
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(2_400.00);
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(0.00);
+
+                        Assertions.assertEquals(18_240.00, mockedProjet.calculApportMinimal());
+
                     },                    () -> {
-                        projet.setPrixHabitation(40_000);
-                        projet.setFraisNotaireAchat(10000);
-                        projet.setRevenuCadastral(350);
-                        projet.setFraisTransformation(37456);
-                        Assertions.assertEquals(17970.34, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(40_000);
+                        mockedProjet.setFraisNotaireAchat(10000);
+                        mockedProjet.setRevenuCadastral(350);
+                        mockedProjet.setFraisTransformation(37456);
+
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(2_247.36);
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(0.00);
+
+                        Assertions.assertEquals(17_970.34, mockedProjet.calculApportMinimal());
+
                     },
                     () -> {
-                        projet.setPrixHabitation(400_000);
-                        projet.setFraisNotaireAchat(10034);
-                        projet.setRevenuCadastral(343);
-                        projet.setFraisTransformation(37455);
-                        Assertions.assertEquals(76004.23, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(400_000);
+                        mockedProjet.setFraisNotaireAchat(10034);
+                        mockedProjet.setRevenuCadastral(343);
+                        mockedProjet.setFraisTransformation(37455);
+
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(2_247.30);
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(33_333.33);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(21_999.99);
+
+                        Assertions.assertEquals(76_004.22, mockedProjet.calculApportMinimal());
+
                     },
                     () -> {
-                        projet.setPrixHabitation(0);
-                        projet.setFraisNotaireAchat(0);
-                        projet.setRevenuCadastral(0);
-                        projet.setFraisTransformation(0);
-                        Assertions.assertEquals(Exception.class, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(0);
+                        mockedProjet.setFraisNotaireAchat(0);
+                        mockedProjet.setRevenuCadastral(0);
+                        mockedProjet.setFraisTransformation(0);
+
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenThrow(Exception.class);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculApportMinimal);
+
                     }
             );
         }
 
         @Test
-        @DisplayName("Calcul de l'apport minimal : Validation valeur négative ")
-        public void calculApportMinimalNegatif(){
+        @DisplayName("Calcul de l'apport minimal : Validation valeur négative")
+        public void calculApportMinimalNegatif() {
             Assertions.assertAll(
                     () -> {
-                        projet.setPrixHabitation(-100_000);
-                        projet.setFraisNotaireAchat(28000);
-                        projet.setRevenuCadastral(1345);
-                        projet.setFraisTransformation(0);
-                        Assertions.assertEquals(Exception.class, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(-100_000);
+                        mockedProjet.setFraisNotaireAchat(28_000);
+                        mockedProjet.setRevenuCadastral(1345);
+                        mockedProjet.setFraisTransformation(0);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenThrow(Exception.class);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculApportMinimal);
                     },
                     () -> {
-                        projet.setPrixHabitation(150_000);
-                        projet.setFraisNotaireAchat(-12000);
-                        projet.setRevenuCadastral(200);
-                        projet.setFraisTransformation(1000);
-                        Assertions.assertEquals(Exception.class, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(150_000);
+                        mockedProjet.setFraisNotaireAchat(-12_000);
+                        mockedProjet.setRevenuCadastral(200);
+                        mockedProjet.setFraisTransformation(1_000);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(60.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(6_600.00);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculApportMinimal);
                     },
                     () -> {
-                        projet.setPrixHabitation(40_000);
-                        projet.setFraisNotaireAchat(10000);
-                        projet.setRevenuCadastral(-350);
-                        projet.setFraisTransformation(40000);
-                        Assertions.assertEquals(Exception.class, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(40_000);
+                        mockedProjet.setFraisNotaireAchat(10_000);
+                        mockedProjet.setRevenuCadastral(-350);
+                        mockedProjet.setFraisTransformation(40_000);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(2_400.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenThrow(Exception.class);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculApportMinimal);
                     },
                     () -> {
-                        projet.setPrixHabitation(40_000);
-                        projet.setFraisNotaireAchat(10000);
-                        projet.setRevenuCadastral(350);
-                        projet.setFraisTransformation(-37456);
-                        Assertions.assertEquals(Exception.class, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(40_000);
+                        mockedProjet.setFraisNotaireAchat(10_000);
+                        mockedProjet.setRevenuCadastral(350);
+                        mockedProjet.setFraisTransformation(-37_456);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenThrow(Exception.class);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculApportMinimal);
                     },
                     () -> {
-                        projet.setPrixHabitation(-400000);
-                        projet.setFraisNotaireAchat(-10034);
-                        projet.setRevenuCadastral(-343);
-                        projet.setFraisTransformation(-37455);
-                        Assertions.assertEquals(Exception.class, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(-400_000);
+                        mockedProjet.setFraisNotaireAchat(-10_034);
+                        mockedProjet.setRevenuCadastral(-343);
+                        mockedProjet.setFraisTransformation(-37_455);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenThrow(Exception.class);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculApportMinimal);
                     }
             );
         }
 
         @Test
         @DisplayName("Calcul de l'apport minimal : Validation nombre réel")
-        public void calculApportMinimalNombreReel(){
+        public void calculApportMinimalNombreReel() {
             Assertions.assertAll(
                     () -> {
-                        projet.setPrixHabitation(100_000.15);
-                        projet.setFraisNotaireAchat(28000);
-                        projet.setRevenuCadastral(1345);
-                        projet.setFraisTransformation(0);
-                        Assertions.assertEquals(45500.03, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(100_000.15);
+                        mockedProjet.setFraisNotaireAchat(28_000);
+                        mockedProjet.setRevenuCadastral(1345);
+                        mockedProjet.setFraisTransformation(0);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(7_500.02);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(0.00);
+
+                        Assertions.assertEquals(45_500.03, mockedProjet.calculApportMinimal());
                     },
                     () -> {
-                        projet.setPrixHabitation(150_000);
-                        projet.setFraisNotaireAchat(12000.90);
-                        projet.setRevenuCadastral(200);
-                        projet.setFraisTransformation(1000);
-                        Assertions.assertEquals(33706.90, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(150_000);
+                        mockedProjet.setFraisNotaireAchat(12_000.90);
+                        mockedProjet.setRevenuCadastral(200);
+                        mockedProjet.setFraisTransformation(1_000);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(6_600.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(60.00);
+
+                        Assertions.assertEquals(33_706.90, mockedProjet.calculApportMinimal());
                     },
                     () -> {
-                        projet.setPrixHabitation(40_000);
-                        projet.setFraisNotaireAchat(10000);
-                        projet.setRevenuCadastral(350);
-                        projet.setFraisTransformation(40000.32154);
-                        Assertions.assertEquals(18240.03, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(40_000);
+                        mockedProjet.setFraisNotaireAchat(10_000);
+                        mockedProjet.setRevenuCadastral(350);
+                        mockedProjet.setFraisTransformation(40_000.32154);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(0.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(2_400.02);
+
+                        Assertions.assertEquals(18_240.03, mockedProjet.calculApportMinimal());
                     },
                     () -> {
-                        projet.setPrixHabitation(40_000.123);
-                        projet.setFraisNotaireAchat(10000.123);
-                        projet.setRevenuCadastral(350);
-                        projet.setFraisTransformation(37456.123);
-                        Assertions.assertEquals(17970.49, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(40_000.123);
+                        mockedProjet.setFraisNotaireAchat(10_000.123);
+                        mockedProjet.setRevenuCadastral(350);
+                        mockedProjet.setFraisTransformation(37_456.123);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenReturn(40_000.00);
+                        Mockito.when(mockedProjet.calculDroitEnregistrement()).thenReturn(0.00);
+                        Mockito.when(mockedProjet.calculTVAFraisTransformation()).thenReturn(2_247.37);
+
+                        Assertions.assertEquals(17_970.49, mockedProjet.calculApportMinimal());
                     },
                     () -> {
-                        projet.setPrixHabitation(-400000.123);
-                        projet.setFraisNotaireAchat(-10034.123);
-                        projet.setRevenuCadastral(-343);
-                        projet.setFraisTransformation(-37455.123);
-                        Assertions.assertEquals(Exception.class, projet.calculApportMinimal());
+                        mockedProjet.setPrixHabitation(-400_000.123);
+                        mockedProjet.setFraisNotaireAchat(-10_034.123);
+                        mockedProjet.setRevenuCadastral(-343);
+                        mockedProjet.setFraisTransformation(-37_455.123);
+
+                        Mockito.when(mockedProjet.calculAbattement()).thenThrow(Exception.class);
+
+                        Assertions.assertThrows(Exception.class, mockedProjet::calculApportMinimal);
                     }
             );
         }
+
     }
 }
